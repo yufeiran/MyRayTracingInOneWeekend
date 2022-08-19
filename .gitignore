@@ -27,7 +27,7 @@
 *.lib
 
 # Executables
-*.exe
+
 *.out
 *.app
 /.vs/MyRayTracingInOneWeekend/v17
@@ -419,3 +419,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+*.ppm
