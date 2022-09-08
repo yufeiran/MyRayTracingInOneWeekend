@@ -68,6 +68,7 @@ public:
 // vec3 Utility Functions
 inline std::ostream& operator<<(std::ostream& out, const vec3& v) {
 	out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
+	return out;
 }
 
 inline vec3 operator+(const vec3& v1, const vec3& v2) {
