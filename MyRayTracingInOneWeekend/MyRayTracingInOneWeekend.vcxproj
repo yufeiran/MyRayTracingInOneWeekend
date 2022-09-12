@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="integrate_x_sq.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pi.cpp" />
   </ItemGroup>
