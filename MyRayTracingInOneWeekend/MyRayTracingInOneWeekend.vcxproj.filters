@@ -24,6 +24,9 @@
     <ClCompile Include="integrate_x_sq.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="sphere_importance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vec3.h">
