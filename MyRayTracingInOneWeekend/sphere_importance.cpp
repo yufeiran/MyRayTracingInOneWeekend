@@ -18,5 +18,5 @@ int main() {
 		sum += cosine_squared / pdf(d);
 	}
 	std::cout << std::fixed << std::setprecision(12);
-	std::cout << "I = " << sum / N << '\n';
+	std::cout << "I = " << sum / N << '\n'; 
 }
