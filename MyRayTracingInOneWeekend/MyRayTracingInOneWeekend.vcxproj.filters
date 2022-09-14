@@ -92,5 +92,8 @@
     <ClInclude Include="onb.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="pdf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

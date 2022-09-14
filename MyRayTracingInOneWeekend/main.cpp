@@ -10,6 +10,7 @@
 #include"box.h"
 #include"constant_medium.h"
 #include"bvh.h"
+#include"pdf.h"
 
 #include<iostream>
 #include<fstream>
@@ -29,7 +30,8 @@ double hit_sphere(const point3& center, double radius, const ray& r) {
 
 }
 
-color ray_color(const ray& r,const color&background, const hittable&world,int depth) {
+color ray_color(const ray& r,const color&background, const hittable&world,
+	shared_ptr<hittable>&lights,int depth) {
 	hit_record rec;
 
 	//超过迭代次数时终止
@@ -43,31 +45,41 @@ color ray_color(const ray& r,const color&background, const hittable&world,int de
 	ray scattered;
 	color attenuation;
 	color emitted = rec.mat_ptr->emitted(r,rec,rec.u, rec.v, rec.p);
-	double pdf;
+	double pdf_val;
 	color albedo;
 
-	if (!rec.mat_ptr->scatter(r, rec, albedo, scattered,pdf))
+	if (!rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf_val))
 		return emitted;
+	auto p0 = make_shared<hittable_pdf>(lights, rec.p);
+	auto p1 = make_shared<cosine_pdf>(rec.normal);
+	mixture_pdf mixed_pdf(p0, p1);
 
-	auto on_light = point3(random_double(213, 343), 554, random_double(227, 332));
-	auto to_light = on_light - rec.p;
-	auto distance_squared = to_light.length_squared();
-	to_light = unit_vector(to_light);
+	scattered = ray(rec.p,mixed_pdf.generate(), r.time());
+	pdf_val = mixed_pdf.value(scattered.direction());
 
-	if (dot(to_light, rec.normal) < 0)
-		return emitted;
+	//cosine_pdf p(rec.normal);
+	//scattered = ray(rec.p, p.generate(), r.time());
+	//pdf_val = p.value(scattered.direction());
 
-	double light_area = (343 - 213) * (332 - 227);
-	auto light_cosine = fabs(to_light.y());
-	if (light_cosine < 0.000001)
-		return emitted;
+	//auto on_light = point3(random_double(213, 343), 554, random_double(227, 332));
+	//auto to_light = on_light - rec.p;
+	//auto distance_squared = to_light.length_squared();
+	//to_light = unit_vector(to_light);
 
-	pdf = distance_squared / (light_cosine * light_area);
-	scattered = ray(rec.p, to_light, r.time());
+	//if (dot(to_light, rec.normal) < 0)
+	//	return emitted;
+
+	//double light_area = (343 - 213) * (332 - 227);
+	//auto light_cosine = fabs(to_light.y());
+	//if (light_cosine < 0.000001)
+	//	return emitted;
+
+	//pdf_val = distance_squared / (light_cosine * light_area);
+	//scattered = ray(rec.p, to_light, r.time());
 
 	return emitted + 
 		albedo*rec.mat_ptr->scattering_pdf(r,rec,scattered)
-			* ray_color(scattered, background, world, depth - 1)/pdf;
+			* ray_color(scattered, background, world,lights,  depth - 1)/ pdf_val;
 }
 
 hittable_list two_perlin_spheres() {
@@ -348,7 +360,7 @@ int main() {
 		world = cornell_box();
 		aspect_ratio = 1.0;
 		image_width = 600;
-		samples_per_pixel = 10;
+		samples_per_pixel = 100;
 		background = color(0, 0, 0);
 		lookfrom = point3(278, 278, -800);
 		lookat = point3(278, 278, 0);
@@ -388,6 +400,9 @@ int main() {
 	camera cam(lookfrom, lookat, vup,vfov, aspect_ratio,aperture,dist_to_focus,0.0,1.0);
 
 
+	shared_ptr<hittable> lights =
+		make_shared<xz_rect>(213, 343, 227, 332, 554, shared_ptr<material>());
+
 	// Render
 
 	std::ofstream os(std::string("out.ppm"));
@@ -401,7 +416,7 @@ int main() {
 				auto u = double(i+random_double()) / (image_width - 1);
 				auto v = double(j+random_double()) / (image_height - 1);
 				ray r = cam.get_ray(u, v);
-				pixel_color += ray_color(r,background, world,max_depth);
+				pixel_color += ray_color(r,background, world, lights,max_depth);
 			}
 			write_color(os, pixel_color,samples_per_pixel);
 		}
