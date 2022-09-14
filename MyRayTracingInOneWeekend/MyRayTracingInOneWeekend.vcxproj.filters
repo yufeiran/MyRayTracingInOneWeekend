@@ -27,6 +27,12 @@
     <ClCompile Include="sphere_importance.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="sphere_plot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cos_cubed.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vec3.h">

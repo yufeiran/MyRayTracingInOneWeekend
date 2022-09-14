@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cos_cubed.cpp" />
     <ClCompile Include="integrate_x_sq.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pi.cpp" />
     <ClCompile Include="sphere_importance.cpp" />
+    <ClCompile Include="sphere_plot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h" />
