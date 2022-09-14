@@ -4,7 +4,7 @@
 
 #include"rtweekend.h"
 #include"texture.h"
-
+#include"onb.h"
 
 struct hit_record;
 
@@ -43,10 +43,12 @@ public:
 		//alb = albedo->value(rec.u, rec.v, rec.p);
 		//pdf = dot(rec.normal, scattered.direction()) / pi;
 
-		auto direction = random_in_hemisphere(rec.normal);
+		onb uvw;
+		uvw.build_from_w(rec.normal);
+		auto direction = uvw.local(random_cosine_direction());
 		scattered = ray(rec.p, unit_vector(direction), r_in.time());
 		alb = albedo->value(rec.u, rec.v, rec.p);
-		pdf = 0.5 / pi;
+		pdf = dot(uvw.w(), scattered.direction()) / pi;
 		return true;
 	}
 	double scattering_pdf(
