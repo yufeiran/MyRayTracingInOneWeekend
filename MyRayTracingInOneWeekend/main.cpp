@@ -416,7 +416,7 @@ int main() {
 			write_color(os, pixel_color,samples_per_pixel);
 		}
 	}
-	std::cerr << "\nDone.\n";
+	std::cerr << "\nDone.\n"; 
 	os.close();
 	system("miniPicViewer.exe out.ppm");
 }
