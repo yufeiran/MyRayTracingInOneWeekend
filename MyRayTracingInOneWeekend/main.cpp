@@ -342,7 +342,7 @@ int main() {
 		break;
 	case 4:
 		world = earth();
-		background = color(0.70, 0.80, 1.00);
+		background = color(0.70, 0.80, 1.00); 
 		lookfrom = point3(12, 2, 3);
 		lookat = point3(0, 0, 0);
 		vfov = 20.0;
